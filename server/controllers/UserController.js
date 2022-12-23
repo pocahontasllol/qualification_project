@@ -1,10 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js"
+import UserModel from "../models/User.js";
 
 export const register = async (req, res) => {
   try {
-
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -15,7 +14,6 @@ export const register = async (req, res) => {
       avatarUrl: req.body.avatarUrl,
       passwordHash: hash,
     });
-
     const user = await doc.save();
 
     const token = jwt.sign(
@@ -79,7 +77,7 @@ export const login = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await UserModel.findById(req.userId);
 
     if (!user) {
       return res.status(404).jsxon({
