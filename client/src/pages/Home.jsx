@@ -1,25 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 import { useDispatch, useSelector } from "react-redux";
-
+import _ from "lodash"
 import { Post } from "../components/Post";
-import { TagsBlock } from "../components/TagsBlock";
-import { CommentsBlock } from "../components/CommentsBlock";
+// import { TagsBlock } from "../components/TagsBlock";
+// import { CommentsBlock } from "../components/CommentsBlock";
 import { fetchPosts, fetchTags } from "../redux/slices/posts";
 
 export const Home = () => {
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(fetchPosts());
-    dispatch(fetchTags());
-  }, []);
+  const userData = useSelector((state) => state.auth.data);
+
   const { posts, tags } = useSelector((state) => state.posts);
 
   const isPostsIsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
-
+  const sortOptions = [{ value: "viewsCount", label: "Популярные" }];
+  // const sortOptions = [{ value: "tags", label: "Популярные" }];
+  useEffect(() => {
+    dispatch(fetchPosts());
+    dispatch(fetchTags());
+  }, []);
+  const sortedViews= _.orderBy()
+  // const handleSort
   return (
     <>
       <Tabs
@@ -27,8 +32,15 @@ export const Home = () => {
         value={0}
         aria-label="basic tabs example"
       >
-        <Tab label="Новые" />
-        <Tab label="Популярные" />
+        <Tab
+          // onClick={() => {
+          //   handleSort("viewsCount");
+          // }}
+          label="Новые"
+        />
+        <Tab
+          label="Популярные"
+        />
       </Tabs>
       <Grid container spacing={4}>
         <Grid xs={8} item>
@@ -39,24 +51,26 @@ export const Home = () => {
               <Post
                 id={obj._id}
                 title={obj.title}
-                imageUrl={obj.imageUrl}
+                imageUrl={
+                  obj.imageUrl ? `http://localhost:5555${obj.imageUrl}` : ""
+                }
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
                 commentsCount={3}
                 tags={obj.tags}
-                isEditable
+                isEditable={userData?.userData._id === obj.user._id}
               />
             )
           )}
         </Grid>
-        <Grid xs={4} item>
+        {/* <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           <CommentsBlock
             items={[
               {
                 user: {
-                  fullName: "Вася Пупкин",
+                  fullName: " hbbu",
                   avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
                 },
                 text: "Это тестовый комментарий",
@@ -71,7 +85,7 @@ export const Home = () => {
             ]}
             isLoading={false}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

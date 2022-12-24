@@ -3,6 +3,7 @@ import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
 import { useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import axios from "../axios";
 
 export const FullPost = () => {
@@ -10,7 +11,7 @@ export const FullPost = () => {
   const [isLoading, setLoading] = useState(true);
   const { id } = useParams();
   console.log(id);
-
+console.log(data)
   useEffect(() => {
     axios
       .get(`/posts/${id}`)
@@ -33,7 +34,7 @@ export const FullPost = () => {
       <Post
         id={data._id}
         title={data.title}
-        imageUrl={data.imageUrl}
+        imageUrl={data.imageUrl ? `http://localhost:5555${data.imageUrl}` : ""}
         user={data.user}
         createdAt={data.createdAt}
         viewsCount={data.viewsCount}
@@ -41,13 +42,13 @@ export const FullPost = () => {
         tags={data.tags}
         isFullPost
       >
-        <p>{data.text}</p>
+        <ReactMarkdown children={data.text} />
       </Post>
-      <CommentsBlock
+      {/* <CommentsBlock
         items={[
           {
             user: {
-              fullName: "Вася Пупкин",
+              fullName: "",
               avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
             },
             text: "Это тестовый комментарий 555555",
@@ -63,7 +64,7 @@ export const FullPost = () => {
         isLoading={false}
       >
         <Index />
-      </CommentsBlock>
+      </CommentsBlock> */}
     </>
   );
 };

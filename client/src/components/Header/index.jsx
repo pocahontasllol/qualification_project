@@ -13,7 +13,7 @@ export const Header = () => {
 
   const onClickLogout = async (values) => {
     dispatch(logout());
-    window.localStorage.removeItem('token')
+    window.localStorage.removeItem("token");
   };
 
   return (
@@ -26,7 +26,7 @@ export const Header = () => {
           <div className={styles.buttons}>
             {isAuth ? (
               <>
-                <Link to="/posts/create">
+                <Link to="/add-post">
                   <Button variant="contained">Написать статью</Button>
                 </Link>
                 <Button
